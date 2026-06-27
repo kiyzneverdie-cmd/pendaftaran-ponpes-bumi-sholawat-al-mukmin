@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal MOSBA - Penerimaan Santri Baru</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            scroll-behavior: smooth;
+        }
+        .header-font {
+            font-family: 'Quicksand', sans-serif;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 min-h-screen text-slate-800">
+
+    <!-- TOP NAVIGATION BAR -->
+    <nav class="bg-emerald-800 text-white shadow-md sticky top-0 z-50 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+            <img src="download.png" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover;" alt="oke">
+            <div class="bg-white text-emerald-800 p-2 rounded-lg font-bold text-xl shadow">
+                <i class="fa-solid fa-mosque"></i>
+            </div>
+            <div>
+                <span class="font-bold text-sm md:text-lg tracking-wide header-font block">PONDOK PESANTREN BUMI SHOLAWAT AL-MUKMIN</span>
+                <span class="text-xs text-emerald-200">Sistem Informasi Penerimaan Santri Baru</span>
+            </div>
+        </div>
+        <div class="flex space-x-2">
+            <button onclick="switchView('portal-pendaftaran')" class="bg-emerald-700 hover:bg-emerald-600 px-4 py-2 rounded-lg text-sm font-semibold transition cursor-pointer">
+                <i class="fa-solid fa-file-pen mr-2"></i>Daftar Santri
+            </button>
+            <button onclick="showAdminAuthModal()" class="bg-amber-500 hover:bg-amber-400 text-emerald-950 px-4 py-2 rounded-lg text-sm font-bold transition cursor-pointer">
+                <i class="fa-solid fa-user-shield mr-2"></i>Host/Admin Panel
+            </button>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="max-w-5xl mx-auto p-4 md:p-8">
+
+        <!-- ================= VIEW 1: PORTAL PENDAFTARAN (FORMULIR) ================= -->
+        <section id="portal-pendaftaran" class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-10 border border-slate-100">
+                <!-- Header Banner -->
+                <div class="border-b border-slate-100 pb-6 mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                    <div>
+                        <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
+                            Formulir MOSBA 2027
+                        </span>
+                        <h1 class="text-3xl font-extrabold text-slate-900 mt-2 header-font">Pendaftaran Santri Baru</h1>
+                        <p class="text-slate-500 text-sm mt-1">Isi semua formulir di bawah ini. Halaman akan otomatis bergulir ke pertanyaan berikutnya setelah selesai diisi.</p>
+                    </div>
+                    <div class="bg-emerald-50 border border-emerald-200 rounded-xl p-4 text-emerald-800 max-w-sm">
+                        <p class="text-xs leading-relaxed font-medium">
+                            <i class="fa-solid fa-circle-info mr-1 text-emerald-600"></i> Pastikan semua berkas asli (KK, Ijazah, Akte Kelahiran) sudah disiapkan dalam bentuk file/foto sebelum mengisi.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- FORMULIR UTAMA -->
+                <form id="mosbaForm" class="space-y-12" onsubmit="handleFormSubmit(event)">
+
+                    <!-- SECTION 1: DATA ANAK -->
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6 border-b border-slate-100 pb-3">
+                            <div class="bg-emerald-100 text-emerald-800 h-8 w-8 rounded-full flex items-center justify-center font-bold">1</div>
+                            <h2 class="text-xl font-bold text-slate-800 header-font">Data Pribadi Calon Santri</h2>
+                        </div>
+                        
+                        <div class="space-y-6">
+                            <!-- NIK -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-nik">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-address-card mr-2 text-emerald-600"></i>Pertanyaan 1: Nomor Induk Kependudukan (NIK) Anak</label>
+                                <input type="number" id="nik" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Masukkan 16 digit NIK" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- NIS -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-nis">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-id-badge mr-2 text-emerald-600"></i>Pertanyaan 2: Nomor Induk Siswa (NIS/NISN)</label>
+                                <input type="number" id="nis" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Masukkan Nomor Induk Siswa" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Nama Anak -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-nama_anak">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-user mr-2 text-emerald-600"></i>Pertanyaan 3: Nama Lengkap Anak</label>
+                                <input type="text" id="nama_anak" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Masukkan nama lengkap anak" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Nomor Ponsel / WA -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-no_hp">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-phone mr-2 text-emerald-600"></i>Pertanyaan 4: Nomor HP / WhatsApp Aktif Orang Tua</label>
+                                <input type="text" id="no_hp" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 081234567890" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan nomor HP</p>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-email">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-envelope mr-2 text-emerald-600"></i>Pertanyaan 5: Alamat Email Aktif</label>
+                                <input type="email" id="email" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: budi@gmail.com" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan email yang valid</p>
+                            </div>
+
+                            <!-- Umur Anak -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-umur_anak">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-cake-candles mr-2 text-emerald-600"></i>Pertanyaan 6: Umur Anak (Tahun)</label>
+                                <input type="number" id="umur_anak" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 12" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Tempat Tanggal Lahir Anak -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-kelahiran_anak">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-calendar-day mr-2 text-emerald-600"></i>Pertanyaan 7: Tempat & Tanggal Lahir Anak</label>
+                                <input type="text" id="kelahiran_anak" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: Jakarta, 12 Oktober 2013" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Target Kelas -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-kelas_anak">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-school mr-2 text-emerald-600"></i>Pertanyaan 8: Mendaftar untuk Kelas Berapa?</label>
+                                <select id="kelas_anak" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" onchange="validateOnType(this)">
+                                    <option value="">-- Pilih Kelas --</option>
+                                    <option value="MI - Kelas I (1)">Kelas I (1) MI / Setingkat SD</option>
+                                    <option value="MI - Kelas II (2)">Kelas II (2) MI / Setingkat SD</option>
+                                    <option value="MI - Kelas III (3)">Kelas III (3) MI / Setingkat SD</option>
+                                    <option value="MI - Kelas IV (4)">Kelas IV (4) MI / Setingkat SD</option>
+                                    <option value="MI - Kelas V (5)">Kelas V (5) MI / Setingkat SD</option>
+                                    <option value="MI - Kelas VI (6)">Kelas VI (6) MI / Setingkat SD</option>
+                                    <option value="MTs - Kelas VII (7)">Kelas VII (7) MTs / Setingkat SMP</option>
+                                    <option value="MTs - Kelas VIII (8)">Kelas VIII (8) MTs / Setingkat SMP</option>
+                                    <option value="MTs - Kelas IX (9)">Kelas IX (9) MTs / Setingkat SMP</option>
+                                    <option value="MA - Kelas X (10)">Kelas X (10) MA / Setingkat SMA</option>
+                                    <option value="MA - Kelas XI (11)">Kelas XI (11) MA / Setingkat SMA</option>
+                                    <option value="MA - Kelas XII (12)">Kelas XII (12) MA / Setingkat SMA</option>
+                                </select>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: DATA ORANG TUA -->
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6 border-b border-slate-100 pb-3">
+                            <div class="bg-emerald-100 text-emerald-800 h-8 w-8 rounded-full flex items-center justify-center font-bold">2</div>
+                            <h2 class="text-xl font-bold text-slate-800 header-font">Data Orang Tua / Wali</h2>
+                        </div>
+
+                        <!-- DATA AYAH -->
+                        <div class="space-y-6 mb-10">
+                            <h3 class="font-bold text-emerald-800 text-md flex items-center"><i class="fa-solid fa-person mr-2"></i>Bagian A: Profil Lengkap Ayah Kandung</h3>
+                            
+                            <!-- Nama Ayah -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-nama_ayah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 9: Nama Lengkap Ayah Kandung</label>
+                                <input type="text" id="nama_ayah" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Nama ayah kandung sesuai KK" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Pekerjaan Ayah -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-pekerjaan_ayah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 10: Pekerjaan Ayah Kandung (Deskripsi Lengkap/Bebas)</label>
+                                <input type="text" id="pekerjaan_ayah" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: Pegawai Negeri Sipil di Dinas Pendidikan / Wirausaha Toko Sembako" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Umur Ayah -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-umur_ayah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 11: Umur Ayah Kandung (Tahun)</label>
+                                <input type="number" id="umur_ayah" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 45" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Tahun Lahir Ayah -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-tahun_lahir_ayah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 12: Tahun Lahir Ayah Kandung</label>
+                                <input type="number" id="tahun_lahir_ayah" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 1981" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Pendidikan Ayah -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-lulusan_ayah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 13: Lulusan Pendidikan Terakhir Ayah Kandung</label>
+                                <select id="lulusan_ayah" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" onchange="validateOnType(this)">
+                                    <option value="">-- Pilih Pendidikan --</option>
+                                    <option value="SD/Sederajat">SD / Sederajat</option>
+                                    <option value="SMP/Sederajat">SMP / Sederajat</option>
+                                    <option value="SMA/SMK/MA">SMA / SMK / MA / Sederajat</option>
+                                    <option value="Diploma (D1/D2/D3)">Diploma (D1/D2/D3)</option>
+                                    <option value="Sarjana (S1)">Sarjana (S1)</option>
+                                    <option value="Magister (S2)">Magister (S2)</option>
+                                    <option value="Doktor (S3)">Doktor (S3)</option>
+                                    <option value="Tidak Bersekolah">Tidak Bersekolah</option>
+                                </select>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+                        </div>
+
+                        <!-- DATA IBU -->
+                        <div class="space-y-6">
+                            <h3 class="font-bold text-emerald-800 text-md flex items-center"><i class="fa-solid fa-person-dress mr-2"></i>Bagian B: Profil Lengkap Ibu Kandung</h3>
+
+                            <!-- Nama Ibu -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-nama_ibu">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 14: Nama Lengkap Ibu Kandung</label>
+                                <input type="text" id="nama_ibu" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Nama ibu kandung sesuai KK" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Pekerjaan Ibu -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-pekerjaan_ibu">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 15: Pekerjaan Ibu Kandung (Deskripsi Lengkap/Bebas)</label>
+                                <input type="text" id="pekerjaan_ibu" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: Mengurus Rumah Tangga / Guru Honorer di MIN 1" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Umur Ibu -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-umur_ibu">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 16: Umur Ibu Kandung (Tahun)</label>
+                                <input type="number" id="umur_ibu" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 42" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Tahun Lahir Ibu -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-tahun_lahir_ibu">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 17: Tahun Lahir Ibu Kandung</label>
+                                <input type="number" id="tahun_lahir_ibu" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" placeholder="Contoh: 1984" oninput="validateOnType(this)">
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Pendidikan Ibu -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-lulusan_ibu">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">Pertanyaan 18: Lulusan Pendidikan Terakhir Ibu Kandung</label>
+                                <select id="lulusan_ibu" class="w-full bg-white border border-slate-300 rounded-lg px-4 py-3 text-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 outline-none transition-all input-field" onchange="validateOnType(this)">
+                                    <option value="">-- Pilih Pendidikan --</option>
+                                    <option value="SD/Sederajat">SD / Sederajat</option>
+                                    <option value="SMP/Sederajat">SMP / Sederajat</option>
+                                    <option value="SMA/SMK/MA">SMA / SMK / MA / Sederajat</option>
+                                    <option value="Diploma (D1/D2/D3)">Diploma (D1/D2/D3)</option>
+                                    <option value="Sarjana (S1)">Sarjana (S1)</option>
+                                    <option value="Magister (S2)">Magister (S2)</option>
+                                    <option value="Doktor (S3)">Doktor (S3)</option>
+                                    <option value="Tidak Bersekolah">Tidak Bersekolah</option>
+                                </select>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: UPLOAD BERKAS -->
+                    <div>
+                        <div class="flex items-center space-x-3 mb-6 border-b border-slate-100 pb-3">
+                            <div class="bg-emerald-100 text-emerald-800 h-8 w-8 rounded-full flex items-center justify-center font-bold">3</div>
+                            <h2 class="text-xl font-bold text-slate-800 header-font">Unggah Berkas Syarat Administratif</h2>
+                        </div>
+
+                        <div class="space-y-6">
+                            <!-- KK File -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-file_kk">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-file-invoice mr-2 text-emerald-600"></i>Pertanyaan 19: Upload Scan/Foto Kartu Keluarga (KK)</label>
+                                <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-6 bg-white hover:border-emerald-500 transition-all flex flex-col items-center justify-center text-center cursor-pointer">
+                                    <input type="file" id="file_kk" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer input-field" onchange="handleFileChange(this)">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-2"></i>
+                                    <span class="text-sm font-semibold text-slate-600 file-label">Pilih file KK (Format: JPG, PNG, PDF max 2MB)</span>
+                                </div>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Ijazah File -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-file_ijazah">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-graduation-cap mr-2 text-emerald-600"></i>Pertanyaan 20: Upload Scan/Foto Ijazah Terakhir</label>
+                                <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-6 bg-white hover:border-emerald-500 transition-all flex flex-col items-center justify-center text-center cursor-pointer">
+                                    <input type="file" id="file_ijazah" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer input-field" onchange="handleFileChange(this)">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-2"></i>
+                                    <span class="text-sm font-semibold text-slate-600 file-label">Pilih file Ijazah (Format: JPG, PNG, PDF max 2MB)</span>
+                                </div>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+
+                            <!-- Akte File (Akte Kelahiran) -->
+                            <div class="question-card bg-slate-50 p-6 rounded-xl border border-slate-200 transition-all" id="qc-file_akte">
+                                <label class="block text-sm font-bold text-slate-700 mb-2"><i class="fa-solid fa-baby mr-2 text-emerald-600"></i>Pertanyaan 21: Upload Scan/Foto Akte Kelahiran Anak</label>
+                                <div class="relative border-2 border-dashed border-slate-300 rounded-xl p-6 bg-white hover:border-emerald-500 transition-all flex flex-col items-center justify-center text-center cursor-pointer">
+                                    <input type="file" id="file_akte" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer input-field" onchange="handleFileChange(this)">
+                                    <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400 mb-2"></i>
+                                    <span class="text-sm font-semibold text-slate-600 file-label">Pilih file Akte Lahir (Format: JPG, PNG, PDF max 2MB)</span>
+                                </div>
+                                <p class="error-msg text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Harap masukkan jawaban</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SUBMIT BUTTONS -->
+                    <div class="pt-6 border-t border-slate-100 flex flex-col items-center">
+                        <div id="general-error-banner" class="w-full bg-red-50 border border-red-200 rounded-lg p-4 mb-4 text-red-700 text-center font-semibold text-sm hidden">
+                            <i class="fa-solid fa-circle-xmark mr-1"></i> Pendaftaran gagal dikirim! Masih ada pertanyaan wajib yang belum diisi. Silakan cek kembali pertanyaan bertanda merah di atas.
+                        </div>
+                        <button type="submit" class="w-full md:w-2/3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-xl tracking-wide uppercase shadow-lg shadow-emerald-600/30 transition-all duration-300 text-base cursor-pointer">
+                            <i class="fa-solid fa-paper-plane mr-2"></i>Kirim Pendaftaran
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </section>
+
+        <!-- ================= VIEW 2: HOST/ADMIN PANEL (DASHBOARD HOST) ================= -->
+        <section id="admin-panel" class="space-y-6 hidden">
+            <div class="bg-white rounded-2xl shadow-xl p-6 md:p-8 border border-slate-100">
+                <!-- Header Admin -->
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center border-b border-slate-100 pb-6 mb-6 gap-4">
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <span class="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Host Access Only</span>
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider" id="total-badge">0 Terdaftar</span>
+                        </div>
+                        <h1 class="text-3xl font-extrabold text-slate-900 mt-2 header-font">Dashboard Host & Pemeriksa Berkas</h1>
+                        <p class="text-slate-500 text-sm mt-1">Gunakan panel ini untuk mengulas kelayakan pendaftar santri baru secara mendalam.</p>
+                    </div>
+                    <button onclick="logoutAdmin()" class="bg-rose-100 hover:bg-rose-200 text-rose-700 font-bold px-4 py-2 rounded-lg text-sm transition cursor-pointer">
+                        <i class="fa-solid fa-arrow-right-from-bracket mr-2"></i>Keluar Admin
+                    </button>
+                </div>
+
+                <!-- STATS & CONTROLS -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    <!-- TOTAL PESERTA -->
+                    <div class="bg-slate-100 border border-slate-200 rounded-xl p-4 flex items-center space-x-3">
+                        <div class="bg-slate-600 text-white h-10 w-10 rounded-lg flex items-center justify-center text-lg shadow">
+                            <i class="fa-solid fa-folder-tree"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-slate-500 font-bold uppercase tracking-wider">Total Peserta</span>
+                            <h3 class="text-xl font-extrabold text-slate-800 header-font" id="stat-total">0</h3>
+                        </div>
+                    </div>
+                    <!-- MI -->
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex items-center space-x-3">
+                        <div class="bg-emerald-500 text-white h-10 w-10 rounded-lg flex items-center justify-center text-lg shadow">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-emerald-700 font-bold uppercase tracking-wider">Jenjang MI</span>
+                            <h3 class="text-xl font-extrabold text-emerald-900 header-font" id="stat-mi">0</h3>
+                        </div>
+                    </div>
+                    <!-- MTS -->
+                    <div class="bg-blue-50 border border-blue-100 rounded-xl p-4 flex items-center space-x-3">
+                        <div class="bg-blue-500 text-white h-10 w-10 rounded-lg flex items-center justify-center text-lg shadow">
+                            <i class="fa-solid fa-graduation-cap"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-blue-700 font-bold uppercase tracking-wider">Jenjang MTs</span>
+                            <h3 class="text-xl font-extrabold text-blue-900 header-font" id="stat-mts">0</h3>
+                        </div>
+                    </div>
+                    <!-- MA -->
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-xl p-4 flex items-center space-x-3">
+                        <div class="bg-indigo-500 text-white h-10 w-10 rounded-lg flex items-center justify-center text-lg shadow">
+                            <i class="fa-solid fa-mosque"></i>
+                        </div>
+                        <div>
+                            <span class="text-[11px] text-indigo-700 font-bold uppercase tracking-wider">Jenjang MA</span>
+                            <h3 class="text-xl font-extrabold text-indigo-900 header-font" id="stat-ma">0</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TABLE LIST REGISTRANTS -->
+                <div class="border border-slate-100 rounded-xl overflow-hidden">
+                    <div class="bg-slate-50 p-4 border-b border-slate-100 flex flex-col md:flex-row justify-between items-center gap-3">
+                        <div class="flex flex-col gap-1">
+                            <span class="font-bold text-slate-700"><i class="fa-solid fa-list-ul mr-2 text-emerald-600"></i>Daftar Pengajuan Santri Baru</span>
+                            <!-- FILTER JENJANG BUTTONS -->
+                            <div class="flex gap-1.5 mt-1">
+                                <button onclick="setJenjangFilter('ALL')" id="filter-all" class="px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-600 text-white transition">Semua</button>
+                                <button onclick="setJenjangFilter('MI')" id="filter-mi" class="px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition">MI</button>
+                                <button onclick="setJenjangFilter('MTs')" id="filter-mts" class="px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition">MTs</button>
+                                <button onclick="setJenjangFilter('MA')" id="filter-ma" class="px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition">MA</button>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="admin-search" oninput="filterTable()" placeholder="Cari nama / NIK..." class="bg-white border border-slate-300 rounded-lg px-3 py-1.5 text-xs focus:ring-1 focus:ring-emerald-500 outline-none w-64">
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="bg-slate-100 border-b border-slate-200 text-slate-600 font-bold">
+                                    <th class="p-4 text-center">No</th>
+                                    <th class="p-4">Calon Santri</th>
+                                    <th class="p-4">Tanggal Masuk</th>
+                                    <th class="p-4">Kontak</th>
+                                    <th class="p-4">Target Kelas</th>
+                                    <th class="p-4">Nama Orang Tua</th>
+                                    <th class="p-4 text-center">Aksi / Validasi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="registrant-table-body" class="divide-y divide-slate-100">
+                                <!-- Data ditarik via JS -->
+                            </tbody>
+                        </table>
+                        <div id="no-data-alert" class="p-8 text-center text-slate-400 hidden">
+                            <i class="fa-solid fa-folder-open text-4xl mb-2"></i>
+                            <p>Belum ada santri yang melakukan pendaftaran.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- SUCCESS MODAL POPUP -->
+    <div id="success-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center shadow-2xl border border-slate-100">
+            <div class="bg-emerald-100 text-emerald-600 h-16 w-16 rounded-full flex items-center justify-center text-3xl mx-auto mb-4">
+                <i class="fa-solid fa-circle-check"></i>
+            </div>
+            <h2 class="text-2xl font-bold text-slate-900 header-font">Alhamdulillah!</h2>
+            <p class="text-emerald-800 text-sm font-semibold mt-1">Berkas Berhasil Terkirim</p>
+            <p class="text-slate-500 text-sm mt-3 leading-relaxed">
+                Data registrasi ananda telah kami rekam dalam sistem pendaftaran. Panitia MOSBA akan segera memverifikasi kelengkapan dokumen yang diunggah. Mohon simpan bukti ini baik-baik.
+            </p>
+            <div class="bg-slate-50 border border-slate-100 rounded-xl p-3 my-4 text-left text-xs text-slate-600 space-y-1">
+                <div><strong>Nama:</strong> <span id="reg-info-nama">-</span></div>
+                <div><strong>NIK:</strong> <span id="reg-info-nik">-</span></div>
+                <div><strong>Pilihan Kelas:</strong> <span id="reg-info-kelas">-</span></div>
+            </div>
+            <button onclick="closeSuccessModal()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl transition cursor-pointer">
+                Selesai & Keluar
+            </button>
+        </div>
+    </div>
+
+    <!-- ACTION COMMUNICATION DIALOG MODAL (SISTEM HUBUNGI/BATALKAN CEPAT TANPA PENDING) -->
+    <div id="comms-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 text-center shadow-2xl border border-slate-100">
+            <div id="comms-icon-box" class="h-14 w-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3">
+                <i id="comms-icon" class="fa-solid"></i>
+            </div>
+            <h3 id="comms-title" class="text-lg font-bold text-slate-900 header-font">Pilih Media Hubungi</h3>
+            <p id="comms-desc" class="text-slate-500 text-xs mt-1 px-2 leading-relaxed">Silakan tentukan platform untuk mengirim notifikasi status verifikasi kepada calon wali santri.</p>
+            
+            <div class="mt-5 flex flex-col gap-2">
+                <button onclick="triggerRedirect('wa')" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                    <i class="fa-brands fa-whatsapp text-lg"></i> Hubungi WhatsApp
+                </button>
+                <button onclick="triggerRedirect('email')" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 rounded-xl transition text-sm flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-envelope text-base"></i> Hubungi Email
+                </button>
+                <button onclick="closeCommsModal()" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2.5 rounded-xl transition text-sm">
+                    Batalkan
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN AUTHENTICATION MODAL -->
+    <div id="admin-auth-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-100 relative">
+            <button onclick="closeAdminAuthModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="bg-amber-100 text-amber-800 h-12 w-12 rounded-full flex items-center justify-center text-xl mx-auto mb-3">
+                    <i class="fa-solid fa-lock"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 header-font">Verifikasi Keamanan</h3>
+                <p class="text-slate-400 text-xs mt-1">Masukkan kata sandi host untuk mengakses data pendaftar.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold text-slate-600 uppercase mb-2">Password Host</label>
+                    <input type="password" id="admin-password" class="w-full bg-slate-50 border border-slate-300 rounded-lg px-4 py-2.5 text-sm focus:ring-1 focus:ring-amber-500 outline-none" placeholder="Masukkan password admin">
+                    <p id="admin-auth-error" class="text-red-500 text-xs mt-1 hidden"><i class="fa-solid fa-circle-exclamation mr-1"></i>Password salah!</p>
+                </div>
+                <button onclick="verifyAdminPassword()" class="w-full bg-amber-500 hover:bg-amber-600 text-emerald-950 font-bold py-3 rounded-xl transition cursor-pointer">
+                    Masuk Panel Admin
+                </button>
+                <div class="text-center">
+                    <span class="text-[10px] text-slate-400">Masukkan kata sandi adminnya <code class="bg-slate-100 px-1 py-0.5 rounded font-mono font-bold text-slate-700">secret code</code></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- DETAIL VIEW MODAL (FOR ADMIN) -->
+    <div id="detail-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden">
+        <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 md:p-8 shadow-2xl border border-slate-100 relative">
+            <button onclick="closeDetailModal()" class="absolute top-4 right-4 text-slate-400 hover:text-slate-600">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+            
+            <div class="border-b border-slate-100 pb-4 mb-6">
+                <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider">Berkas Lengkap Santri</span>
+                <h3 class="text-2xl font-extrabold text-slate-900 mt-2 header-font" id="det-nama_anak">-</h3>
+                <p class="text-slate-400 text-xs mt-1">Registrasi ID: <span id="det-id">-</span> | Tanggal Masuk: <span id="det-tgl_masuk">-</span></p>
+            </div>
+
+            <div class="space-y-6">
+                <!-- GRID DATA ANAK & ORANG TUA -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Data Anak -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-emerald-800 border-b border-slate-200 pb-2 mb-3"><i class="fa-solid fa-child mr-2"></i>Data Calon Santri</h4>
+                        <table class="text-xs w-full space-y-2">
+                            <tr class="h-8">
+                                <td class="text-slate-400 w-1/3">NIK</td>
+                                <td class="font-bold text-slate-700" id="det-nik">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">NISN</td>
+                                <td class="font-bold text-slate-700" id="det-nis">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Kontak</td>
+                                <td class="font-bold text-slate-700"><span id="det-no_hp">-</span> / <span id="det-email">-</span></td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Umur</td>
+                                <td class="font-bold text-slate-700" id="det-umur_anak">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Kelahiran</td>
+                                <td class="font-bold text-slate-700" id="det-kelahiran_anak">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Pilihan Kelas</td>
+                                <td class="font-bold text-slate-700" id="det-kelas_anak">-</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Data Ayah -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                        <h4 class="font-bold text-indigo-800 border-b border-slate-200 pb-2 mb-3"><i class="fa-solid fa-person mr-2"></i>Data Ayah Kandung</h4>
+                        <table class="text-xs w-full space-y-2">
+                            <tr class="h-8">
+                                <td class="text-slate-400 w-1/3">Nama Ayah</td>
+                                <td class="font-bold text-slate-700" id="det-nama_ayah">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Umur / Lahir</td>
+                                <td class="font-bold text-slate-700"><span id="det-umur_ayah">-</span> Thn (Lahir <span id="det-tahun_lahir_ayah">-</span>)</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Pendidikan</td>
+                                <td class="font-bold text-slate-700" id="det-lulusan_ayah">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Pekerjaan</td>
+                                <td class="font-bold text-slate-700" id="det-pekerjaan_ayah">-</td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <!-- Data Ibu -->
+                    <div class="bg-slate-50 p-4 rounded-xl border border-slate-200 md:col-span-2">
+                        <h4 class="font-bold text-rose-800 border-b border-slate-200 pb-2 mb-3"><i class="fa-solid fa-person-dress mr-2"></i>Data Ibu Kandung</h4>
+                        <table class="text-xs w-full space-y-2">
+                            <tr class="h-8">
+                                <td class="text-slate-400 w-1/6">Nama Ibu</td>
+                                <td class="font-bold text-slate-700" id="det-nama_ibu">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Umur / Lahir</td>
+                                <td class="font-bold text-slate-700"><span id="det-umur_ibu">-</span> Thn (Lahir <span id="det-tahun_lahir_ibu">-</span>)</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Pendidikan</td>
+                                <td class="font-bold text-slate-700" id="det-lulusan_ibu">-</td>
+                            </tr>
+                            <tr class="h-8">
+                                <td class="text-slate-400">Pekerjaan</td>
+                                <td class="font-bold text-slate-700" id="det-pekerjaan_ibu">-</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- BERKAS DIGITAL (MOCK PREVIEW) -->
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-200">
+                    <h4 class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-3"><i class="fa-solid fa-folder-open mr-2"></i>File Persyaratan Administratif</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex flex-col items-center justify-center text-center">
+                            <p class="font-bold text-slate-700 mb-2">Kartu Keluarga (KK)</p>
+                            <img id="det-img-kk" src="" alt="KK Preview" class="w-full h-40 object-cover rounded-lg border border-slate-100 hidden">
+                            <span class="text-slate-400 text-[10px]" id="det-file_kk">Scan_KK.pdf</span>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex flex-col items-center justify-center text-center">
+                            <p class="font-bold text-slate-700 mb-2">Ijazah Terakhir</p>
+                            <img id="det-img-ijazah" src="" alt="Ijazah Preview" class="w-full h-40 object-cover rounded-lg border border-slate-100 hidden">
+                            <span class="text-slate-400 text-[10px]" id="det-file_ijazah">Ijazah_Ali.pdf</span>
+                        </div>
+                        <div class="p-3 bg-white border border-slate-200 rounded-lg flex flex-col items-center justify-center text-center">
+                            <p class="font-bold text-slate-700 mb-2">Akte Kelahiran</p>
+                            <img id="det-img-akte" src="" alt="Akte Preview" class="w-full h-40 object-cover rounded-lg border border-slate-100 hidden">
+                            <span class="text-slate-400 text-[10px]" id="det-file_akte">Akte_Ali.jpg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-slate-100 pt-4 mt-6 flex justify-end space-x-2">
+                <button onclick="closeDetailModal()" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-4 py-2 rounded-lg text-sm transition">
+                    Tutup Detail
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Data Store (Local Storage)
+        let DB = JSON.parse(localStorage.getItem('mosba_registrants')) || [];
+        let isAdminLoggedIn = false;
+        let activeJenjangFilter = 'ALL';
+        
+        // Comms Session State variables
+        let currentActiveCommsId = null;
+        let currentActiveCommsStatus = null;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            setupAutoScroll();
+            updateStatsAndTable();
+        });
+
+        // Toggles Views (Pendaftaran / Admin)
+        function switchView(viewId) {
+            if (viewId === 'admin-panel' && !isAdminLoggedIn) {
+                showAdminAuthModal();
+                return;
+            }
+            document.getElementById('portal-pendaftaran').classList.add('hidden');
+            document.getElementById('admin-panel').classList.add('hidden');
+            document.getElementById(viewId).classList.remove('hidden');
+        }
+
+        // 1. SETUP PROGRESSIVE SCROLL TO NEXT QUESTION
+        function setupAutoScroll() {
+            const inputs = document.querySelectorAll('.input-field');
+            inputs.forEach((input, index) => {
+                const triggerEvent = input.tagName === 'SELECT' || input.type === 'file' ? 'change' : 'blur';
+                input.addEventListener(triggerEvent, () => {
+                    const card = input.closest('.question-card');
+                    const value = input.value.trim();
+
+                    if (value !== '') {
+                        card.classList.remove('bg-slate-50', 'border-slate-200', 'border-red-500');
+                        card.classList.add('bg-emerald-50/50', 'border-emerald-500');
+                        card.querySelector('.error-msg').classList.add('hidden');
+
+                        const nextCard = card.nextElementSibling;
+                        if (nextCard && nextCard.classList.contains('question-card')) {
+                            nextCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            const nextInput = nextCard.querySelector('.input-field');
+                            if (nextInput) setTimeout(() => nextInput.focus(), 400);
+                        } else {
+                            const nextSectionCard = card.closest('div').nextElementSibling?.querySelector('.question-card');
+                            if (nextSectionCard) {
+                                nextSectionCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                const nextInput = nextSectionCard.querySelector('.input-field');
+                                if (nextInput) setTimeout(() => nextInput.focus(), 400);
+                            }
+                        }
+                    }
+                });
+            });
+        }
+
+        // Handle Visual File Change (Menyimpan data gambar asli dalam format Base64)
+        function handleFileChange(input) {
+            const file = input.files[0];
+            const fileLabel = input.closest('div').querySelector('.file-label');
+            
+            if (file) {
+                fileLabel.innerHTML = `<i class="fa-solid fa-file text-emerald-600 mr-1"></i> ${file.name}`;
+                
+                // Konversi file gambar ke base64 string agar bisa langsung ditampilkan fotonya nanti
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    input.setAttribute('data-base64', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                fileLabel.innerHTML = "Pilih file";
+                input.removeAttribute('data-base64');
+            }
+            validateOnType(input);
+        }
+
+        // Validasi secara langsung ketika user mengetik
+        function validateOnType(input) {
+            const card = input.closest('.question-card');
+            const value = input.value.trim();
+            if (value !== '') {
+                card.classList.remove('border-red-500');
+                card.classList.add('bg-emerald-50/50', 'border-emerald-500');
+                card.querySelector('.error-msg').classList.add('hidden');
+            }
+        }
+
+        // 2. SUBMIT FORM VALIDATION
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            let isFormValid = true;
+            const errorBanner = document.getElementById('general-error-banner');
+            errorBanner.classList.add('hidden');
+
+            const inputs = document.querySelectorAll('.input-field');
+            let firstInvalidCard = null;
+
+            inputs.forEach(input => {
+                const card = input.closest('.question-card');
+                const value = input.value.trim();
+
+                if (value === '') {
+                    isFormValid = false;
+                    card.classList.remove('bg-slate-50', 'border-slate-200', 'bg-emerald-50/50', 'border-emerald-500');
+                    card.classList.add('border-red-500');
+                    card.querySelector('.error-msg').classList.remove('hidden');
+
+                    if (!firstInvalidCard) {
+                        firstInvalidCard = card;
+                    }
+                }
+            });
+
+            if (!isFormValid) {
+                errorBanner.classList.remove('hidden');
+                if (firstInvalidCard) {
+                    firstInvalidCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    const firstInvalidInput = firstInvalidCard.querySelector('.input-field');
+                    if (firstInvalidInput) firstInvalidInput.focus();
+                }
+                return;
+            }
+
+            saveToDatabase();
+        }
+
+        // 3. DATABASE MANAGEMENT (LOCAL STORAGE)
+        function saveToDatabase() {
+            const file_kk_name = document.getElementById('file_kk').files[0]?.name || 'Scan_KK.pdf';
+            const file_ijazah_name = document.getElementById('file_ijazah').files[0]?.name || 'Scan_Ijazah.pdf';
+            const file_akte_name = document.getElementById('file_akte').files[0]?.name || 'Scan_Akte.jpg';
+
+            // Ambil data base64 dari attribute input
+            const file_kk_src = document.getElementById('file_kk').getAttribute('data-base64') || '';
+            const file_ijazah_src = document.getElementById('file_ijazah').getAttribute('data-base64') || '';
+            const file_akte_src = document.getElementById('file_akte').getAttribute('data-base64') || '';
+
+            const sekarang = new Date();
+            const opsiTgl = { day: '2-digit', month: 'long', year: 'numeric' };
+            const tanggalMasukFormatted = sekarang.toLocaleDateString('id-ID', opsiTgl);
+
+            const newSantri = {
+                id: 'REG-' + Date.now().toString().slice(-6),
+                nik: document.getElementById('nik').value,
+                nis: document.getElementById('nis').value,
+                nama_anak: document.getElementById('nama_anak').value,
+                no_hp: document.getElementById('no_hp').value,
+                email: document.getElementById('email').value,
+                umur_anak: document.getElementById('umur_anak').value,
+                kelahiran_anak: document.getElementById('kelahiran_anak').value,
+                kelas_anak: document.getElementById('kelas_anak').value,
+                tanggal_masuk: tanggalMasukFormatted,
+                // Ayah
+                nama_ayah: document.getElementById('nama_ayah').value,
+                pekerjaan_ayah: document.getElementById('pekerjaan_ayah').value,
+                umur_ayah: document.getElementById('umur_ayah').value,
+                tahun_lahir_ayah: document.getElementById('tahun_lahir_ayah').value,
+                lulusan_ayah: document.getElementById('lulusan_ayah').value,
+                // Ibu
+                nama_ibu: document.getElementById('nama_ibu').value,
+                pekerjaan_ibu: document.getElementById('pekerjaan_ibu').value,
+                umur_ibu: document.getElementById('umur_ibu').value,
+                tahun_lahir_ibu: document.getElementById('tahun_lahir_ibu').value,
+                lulusan_ibu: document.getElementById('lulusan_ibu').value,
+                // Files
+                file_kk: file_kk_name,
+                file_ijazah: file_ijazah_name,
+                file_akte: file_akte_name,
+                // Image Sources (Base64)
+                img_kk: file_kk_src,
+                img_ijazah: file_ijazah_src,
+                img_akte: file_akte_src
+            };
+
+            DB.push(newSantri);
+            localStorage.setItem('mosba_registrants', JSON.stringify(DB));
+
+            document.getElementById('reg-info-nama').innerText = newSantri.nama_anak;
+            document.getElementById('reg-info-nik').innerText = newSantri.nik;
+            document.getElementById('reg-info-kelas').innerText = newSantri.kelas_anak;
+            
+            showSuccessModal();
+            updateStatsAndTable();
+            resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById('mosbaForm').reset();
+            document.querySelectorAll('.question-card').forEach(card => {
+                card.classList.remove('bg-emerald-50/50', 'border-emerald-500', 'border-red-500');
+                card.classList.add('bg-slate-50', 'border-slate-200');
+                card.querySelector('.error-msg').classList.add('hidden');
+            });
+            document.getElementById('file_kk').removeAttribute('data-base64');
+            document.getElementById('file_ijazah').removeAttribute('data-base64');
+            document.getElementById('file_akte').removeAttribute('data-base64');
+            document.getElementById('file_kk').closest('div').querySelector('.file-label').innerHTML = "Pilih file KK (Format: JPG, PNG, PDF max 2MB)";
+            document.getElementById('file_ijazah').closest('div').querySelector('.file-label').innerHTML = "Pilih file Ijazah (Format: JPG, PNG, PDF max 2MB)";
+            document.getElementById('file_akte').closest('div').querySelector('.file-label').innerHTML = "Pilih file Akte Lahir (Format: JPG, PNG, PDF max 2MB)";
+        }
+
+        // Set active filter jenjang MI, MTs, MA
+        function setJenjangFilter(jenjang) {
+            activeJenjangFilter = jenjang;
+            const buttons = ['all', 'mi', 'mts', 'ma'];
+            buttons.forEach(b => {
+                const btn = document.getElementById(`filter-${b}`);
+                if (b === jenjang.toLowerCase()) {
+                    btn.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-emerald-600 text-white transition";
+                } else {
+                    btn.className = "px-2.5 py-1 text-xs font-bold rounded-md bg-slate-200 text-slate-700 hover:bg-slate-300 transition";
+                }
+            });
+            updateStatsAndTable();
+        }
+
+        // Update Stats & Table data in Host Admin Dashboard
+        function updateStatsAndTable() {
+            const total = DB.length;
+            const mi = DB.filter(s => s.kelas_anak.startsWith('MI')).length;
+            const mts = DB.filter(s => s.kelas_anak.startsWith('MTs')).length;
+            const ma = DB.filter(s => s.kelas_anak.startsWith('MA')).length;
+
+            document.getElementById('total-badge').innerText = `${total} Terdaftar`;
+            document.getElementById('stat-total').innerText = total;
+            document.getElementById('stat-mi').innerText = mi;
+            document.getElementById('stat-mts').innerText = mts;
+            document.getElementById('stat-ma').innerText = ma;
+
+            const tbody = document.getElementById('registrant-table-body');
+            const noDataAlert = document.getElementById('no-data-alert');
+            tbody.innerHTML = '';
+
+            let filteredDB = DB;
+            if (activeJenjangFilter !== 'ALL') {
+                filteredDB = DB.filter(s => s.kelas_anak.startsWith(activeJenjangFilter));
+            }
+
+            if (filteredDB.length === 0) {
+                noDataAlert.classList.remove('hidden');
+                return;
+            } else {
+                noDataAlert.classList.add('hidden');
+            }
+
+            filteredDB.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50 transition-colors duration-150 text-slate-700";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-slate-500 text-center">${index + 1}</td>
+                    <td class="p-4">
+                        <div class="font-bold text-slate-900">${item.nama_anak}</div>
+                        <span class="text-xs text-slate-400">ID: ${item.id} | Umur: ${item.umur_anak} Thn</span>
+                    </td>
+                    <td class="p-4 text-xs font-medium text-slate-600">${item.tanggal_masuk || '-'}</td>
+                    <td class="p-4 text-xs space-y-0.5">
+                        <div class="font-medium text-slate-700"><i class="fa-solid fa-phone text-emerald-600 mr-1"></i>${item.no_hp}</div>
+                        <div class="text-slate-500"><i class="fa-solid fa-envelope text-blue-500 mr-1"></i>${item.email}</div>
+                    </td>
+                    <td class="p-4 font-semibold text-emerald-800">${item.kelas_anak}</td>
+                    <td class="p-4 text-xs">
+                        <div>Ayah: <span class="font-bold text-slate-700">${item.nama_ayah}</span></div>
+                        <div>Ibu: <span class="font-bold text-slate-700">${item.nama_ibu}</span></div>
+                    </td>
+                    <td class="p-4">
+                        <div class="flex flex-col sm:flex-row justify-center items-center gap-1.5">
+                            <button onclick="viewDetail('${item.id}')" class="bg-slate-600 hover:bg-slate-700 text-white text-[11px] font-bold px-2 py-1.5 rounded transition cursor-pointer">
+                                <i class="fa-solid fa-magnifying-glass"></i> Detail
+                            </button>
+                            <button onclick="openCommsModal('${item.id}', 'terima')" class="bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-bold px-2 py-1.5 rounded transition cursor-pointer">
+                                <i class="fa-solid fa-check"></i> Terima
+                            </button>
+                            <button onclick="openCommsModal('${item.id}', 'tolak')" class="bg-amber-600 hover:bg-amber-700 text-white text-[11px] font-bold px-2 py-1.5 rounded transition cursor-pointer">
+                                <i class="fa-solid fa-xmark"></i> Tidak
+                            </button>
+                            <button onclick="deleteIndividual('${item.id}')" class="bg-rose-600 hover:bg-rose-700 text-white text-[11px] font-bold px-2 py-1.5 rounded transition cursor-pointer">
+                                <i class="fa-solid fa-trash"></i> Hapus
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // HAPUS INDIVIDUAL DATA SANTRI (Sekarang jadi satu-satunya cara data dihapus)
+        function deleteIndividual(id) {
+            if (confirm("Apakah anda yakin ingin menghapus data calon santri ini secara permanen?")) {
+                DB = DB.filter(s => s.id !== id);
+                localStorage.setItem('mosba_registrants', JSON.stringify(DB));
+                updateStatsAndTable();
+            }
+        }
+
+        // BUKA MODAL PILIHAN KUSTOM
+        function openCommsModal(id, status) {
+            currentActiveCommsId = id;
+            currentActiveCommsStatus = status;
+
+            const modal = document.getElementById('comms-modal');
+            const title = document.getElementById('comms-title');
+            const iconBox = document.getElementById('comms-icon-box');
+            const icon = document.getElementById('comms-icon');
+
+            if (status === 'terima') {
+                title.innerText = "Terima & Hubungi Wali";
+                iconBox.className = "h-14 w-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 bg-emerald-100 text-emerald-600";
+                icon.className = "fa-solid fa-circle-check";
+            } else {
+                title.innerText = "Tolak & Hubungi Wali";
+                iconBox.className = "h-14 w-14 rounded-full flex items-center justify-center text-2xl mx-auto mb-3 bg-amber-100 text-amber-600";
+                icon.className = "fa-solid fa-circle-xmark";
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeCommsModal() {
+            document.getElementById('comms-modal').classList.add('hidden');
+            currentActiveCommsId = null;
+            currentActiveCommsStatus = null;
+        }
+
+        // REDIRECT DAN PROSES EKSEKUSI PLATFORM MEDIA YANG DIPILIH
+        function triggerRedirect(platform) {
+            if (!currentActiveCommsId || !currentActiveCommsStatus) return;
+
+            const pendaftar = DB.find(s => s.id === currentActiveCommsId);
+            if (!pendaftar) return;
+
+            let formattedPhone = pendaftar.no_hp.replace(/[^0-9]/g, '');
+            if (formattedPhone.startsWith('0')) {
+                formattedPhone = '62' + formattedPhone.slice(1);
+            }
+
+            let pesanWA = "";
+            let subjekEmail = "";
+            let isiEmail = "";
+
+            if (currentActiveCommsStatus === 'terima') {
+                pesanWA = `Assalamualaikum Wr. Wb. Selamat, ananda *${pendaftar.nama_anak}* dinyatakan *DITERIMA* di Ponpes Bumi Sholawat Al-Mukmin untuk jenjang *${pendaftar.kelas_anak}*. Mohon segera lakukan daftar ulang. Terima kasih.`;
+                subjekEmail = "Pemberitahuan Kelulusan MOSBA Ponpes Bumi Sholawat Al-Mukmin";
+                isiEmail = `Selamat, ananda ${pendaftar.nama_anak} dinyatakan DITERIMA pada pilihan jenjang ${pendaftar.kelas_anak}. Silakan lakukan proses administrasi lanjutan.`;
+            } else {
+                pesanWA = `Assalamualaikum Wr. Wb. Terima kasih telah mendaftar di Ponpes Bumi Sholawat Al-Mukmin. Berdasarkan verifikasi berkas, mohon maaf berkas ananda *${pendaftar.nama_anak}* saat ini *BELUM DAPAT DITERIMA*. Tetap semangat!`;
+                subjekEmail = "Hasil Verifikasi Pendaftaran Ponpes Bumi Sholawat Al-Mukmin";
+                isiEmail = `Terima kasih atas minat Anda. Berdasarkan hasil seleksi berkas administrasi, mohon maaf pendaftaran untuk ananda ${pendaftar.nama_anak} saat ini belum memenuhi kriteria penerimaan kami.`;
+            }
+
+            if (platform === 'wa') {
+                window.open(`https://wa.me/${formattedPhone}?text=${encodeURIComponent(pesanWA)}`, '_blank');
+            } else if (platform === 'email') {
+                window.open(`mailto:${pendaftar.email}?subject=${encodeURIComponent(subjekEmail)}&body=${encodeURIComponent(isiEmail)}`, '_blank');
+            }
+
+            // [PERUBAHAN]: Baris penghapusan otomatis DB.filter() telah DIHAPUS agar data tidak langsung hilang
+            closeCommsModal();
+            updateStatsAndTable();
+        }
+
+        // Admin Filter & Search Functionality
+        function filterTable() {
+            const query = document.getElementById('admin-search').value.toLowerCase();
+            const rows = document.querySelectorAll('#registrant-table-body tr');
+            
+            rows.forEach(row => {
+                const name = row.children[1].textContent.toLowerCase();
+                const identity = row.children[3].textContent.toLowerCase();
+                if (name.includes(query) || identity.includes(query)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // View Detailed Santri Information (Admin Modal)
+        function viewDetail(registrantId) {
+            const item = DB.find(s => s.id === registrantId);
+            if (!item) return;
+
+            document.getElementById('det-nama_anak').innerText = item.nama_anak;
+            document.getElementById('det-id').innerText = item.id;
+            document.getElementById('det-nik').innerText = item.nik;
+            document.getElementById('det-nis').innerText = item.nis;
+            document.getElementById('det-no_hp').innerText = item.no_hp;
+            document.getElementById('det-email').innerText = item.email;
+            document.getElementById('det-umur_anak').innerText = item.umur_anak + ' Tahun';
+            document.getElementById('det-kelahiran_anak').innerText = item.kelahiran_anak;
+            document.getElementById('det-kelas_anak').innerText = item.kelas_anak;
+            document.getElementById('det-tgl_masuk').innerText = item.tanggal_masuk || '-';
+            
+            document.getElementById('det-nama_ayah').innerText = item.nama_ayah;
+            document.getElementById('det-umur_ayah').innerText = item.umur_ayah;
+            document.getElementById('det-tahun_lahir_ayah').innerText = item.tahun_lahir_ayah;
+            document.getElementById('det-lulusan_ayah').innerText = item.lulusan_ayah;
+            document.getElementById('det-pekerjaan_ayah').innerText = item.pekerjaan_ayah;
+
+            document.getElementById('det-nama_ibu').innerText = item.nama_ibu;
+            document.getElementById('det-umur_ibu').innerText = item.umur_ibu;
+            document.getElementById('det-tahun_lahir_ibu').innerText = item.tahun_lahir_ibu;
+            document.getElementById('det-lulusan_ibu').innerText = item.lulusan_ibu;
+            document.getElementById('det-pekerjaan_ibu').innerText = item.pekerjaan_ibu;
+
+            document.getElementById('det-file_kk').innerText = item.file_kk;
+            document.getElementById('det-file_ijazah').innerText = item.file_ijazah;
+            document.getElementById('det-file_akte').innerText = item.file_akte;
+
+            // [PERUBAHAN]: Logika untuk menampilkan preview foto secara langsung jika berkas diupload
+            const imgKk = document.getElementById('det-img-kk');
+            const imgIjazah = document.getElementById('det-img-ijazah');
+            const imgAkte = document.getElementById('det-img-akte');
+
+            if (item.img_kk) { imgKk.src = item.img_kk; imgKk.classList.remove('hidden'); } else { imgKk.classList.add('hidden'); }
+            if (item.img_ijazah) { imgIjazah.src = item.img_ijazah; imgIjazah.classList.remove('hidden'); } else { imgIjazah.classList.add('hidden'); }
+            if (item.img_akte) { imgAkte.src = item.img_akte; imgAkte.classList.remove('hidden'); } else { imgAkte.classList.add('hidden'); }
+
+            showDetailModal();
+        }
+
+        // 4. AUTHENTICATION AND MODAL TRIGGERS
+        function showAdminAuthModal() {
+            document.getElementById('admin-auth-modal').classList.remove('hidden');
+            document.getElementById('admin-password').focus();
+        }
+        function closeAdminAuthModal() {
+            document.getElementById('admin-auth-modal').classList.add('hidden');
+            document.getElementById('admin-password').value = '';
+            document.getElementById('admin-auth-error').classList.add('hidden');
+        }
+        function verifyAdminPassword() {
+            const password = document.getElementById('admin-password').value;
+            if (password === 'admin123') {
+                isAdminLoggedIn = true;
+                closeAdminAuthModal();
+                switchView('admin-panel');
+            } else {
+                document.getElementById('admin-auth-error').classList.remove('hidden');
+            }
+        }
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            switchView('portal-pendaftaran');
+            alert("Anda telah keluar dari mode Host Admin.");
+        }
+
+        // Success Modal Controls
+        function showSuccessModal() {
+            document.getElementById('success-modal').classList.remove('hidden');
+        }
+        function closeSuccessModal() {
+            document.getElementById('success-modal').classList.add('hidden');
+        }
+
+        // Detail Modal Controls
+        function showDetailModal() {
+            document.getElementById('detail-modal').classList.remove('hidden');
+        }
+        function closeDetailModal() {
+            document.getElementById('detail-modal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
